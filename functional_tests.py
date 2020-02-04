@@ -1,4 +1,6 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
 import unittest
 
 class NewVisitorTest(unittest.TestCase):
@@ -16,25 +18,40 @@ class NewVisitorTest(unittest.TestCase):
 
         #Guilherme percebe que o titulo da página que se encontra e o cabeçalho mencionam 
         #listas de tarefas (to-do)
-        self.assertIn('To-do', self.browser.title)
-        self.fail('Finish the test!')
+        self.assertIn('To-Do', self.browser.title)
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('To-Do', header_text);
 
         #Guilherme é convidado a inserir um item de tarefa imediatamente
-
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(
+            inputbox.get_attribute('placeholder'),
+            'Enter a to-do item'
+        )
 
 
 
         #Guilherme digita "Comprar ingressos para o cinema" em uma caixa de texto (Guilherme
         # costuma sair bastante com seus amigos e sua namorada Julia)
+        inputbox.send_keys('Comprar ingressos para o cinema')
 
 
         #Quando Guilherme tecla enter, a página é atualizada, e agora a página lista "1:Comprar 
         # ingressos para o cinema" como um item em uma lista de tarefas
+        inputbox.send_keys(Keys.ENTER)        
+        time.sleep(1)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr') #(!!Elements#Element
+        self.assertTrue(
+            any(row.text == '1: Comprar ingressos para o cinema')
+        )
 
 
         #Ainda continua havendo uma caixa de texto convidando-o a acrescentar outro item 
         #dentro da lista de tarefas. Guilherme insere "encontrar-me com Julia" - Guilherme é um
         #namorado bem atensioso
+        self.fail('Finish the test!')
 
         #A pagina é atualizada novamente e agora mostra os dois itens em sua lista
 
