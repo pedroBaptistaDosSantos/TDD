@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 import unittest
 
+
 class NewVisitorTest(unittest.TestCase):
     
     def setUp(self):
@@ -20,7 +21,7 @@ class NewVisitorTest(unittest.TestCase):
         #listas de tarefas (to-do)
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('To-Do', header_text);
+        self.assertIn('To-Do', header_text)
 
         #Guilherme é convidado a inserir um item de tarefa imediatamente
         inputbox = self.browser.find_element_by_id('id_new_item')
@@ -33,7 +34,9 @@ class NewVisitorTest(unittest.TestCase):
 
         #Guilherme digita "Comprar ingressos para o cinema" em uma caixa de texto (Guilherme
         # costuma sair bastante com seus amigos e sua namorada Julia)
-        inputbox.send_keys('Comprar ingressos para o cinema')
+        
+        inputbox.send_keys('1: Comprar ingressos para o cinema')
+        
 
 
         #Quando Guilherme tecla enter, a página é atualizada, e agora a página lista "1:Comprar 
@@ -44,7 +47,8 @@ class NewVisitorTest(unittest.TestCase):
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr') #(!!Elements#Element
         self.assertTrue(
-            any(row.text == '1: Comprar ingressos para o cinema')
+            any(row.text == '1: Comprar ingressos para o cinema' for row in rows),
+            "New to-do item did not appear in table"
         )
 
 
